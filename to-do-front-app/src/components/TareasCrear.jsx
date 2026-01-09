@@ -84,7 +84,7 @@ export default function TareasCrear({ open, onClose, nuevaTarea }) {
         
         <DialogActions sx={{ p: 3, pt: 2 }}>
           <Button 
-            onClick={handleClose}
+            onClick={limpiarFormulario}
             variant="outlined"
             sx={{ mr: 1 }}
           >
