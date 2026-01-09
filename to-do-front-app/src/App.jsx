@@ -9,6 +9,7 @@ import {
   ThemeProvider,
   createTheme
 } from '@mui/material'
+import TareasCrear from './components/TareasCrear'
 
 const theme = createTheme({
   palette: {
@@ -31,11 +32,20 @@ const theme = createTheme({
 })
 
 function App() {
-  const [tareas, setTareas] = useState([])
 
-  const handleAddTask = () => {
-    // Función para agregar tareas (implementar después)
-    console.log('Agregar nueva tarea')
+  const [tareas, setTareas] = useState([]);
+  const [dialogOpenCrear, setDialogOpenCrear] = useState(false);
+
+  const handleOpenDialogCrear = () => {
+    setDialogOpenCrear(true)
+  }
+
+  const handleCloseDialogCrear = () => {
+    setDialogOpenCrear(false)
+  }
+
+  const handleNuevaTarea = (nuevaTarea) => {
+    setTareas(prev => [...prev, nuevaTarea])
   }
 
   return (
@@ -43,6 +53,7 @@ function App() {
       <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
         <Container maxWidth="md" sx={{ py: 4 }}>
           <Box sx={{ textAlign: 'center', mb: 4 }}>
+
             <Typography
               variant="h1"
               gutterBottom
@@ -53,15 +64,17 @@ function App() {
                 fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
               }}
             >
-              Lista de Tareas
+              Gestor de Tareas
             </Typography>
+
             <Typography
               variant="h6"
               color="text.secondary"
               sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
             >
-              Gestior de tareas challenge Visma
+              Challenge técnico para empresa Visma
             </Typography>
+
           </Box>
 
           <Card elevation={3} sx={{ mb: 3 }}>
@@ -69,7 +82,7 @@ function App() {
               <Button
                 variant="contained"
                 size="large"
-                onClick={handleAddTask}
+                onClick={handleOpenDialogCrear}
                 sx={{
                   px: 4,
                   py: 2,
@@ -90,8 +103,8 @@ function App() {
             </CardContent>
           </Card>
 
-          <Box sx={{ mt: 3 }}>
-            {tareas.length === 0 ? (
+          {tareas.length === 0 &&
+            <Box sx={{ mt: 3 }}>
               <Card elevation={1}>
                 <CardContent sx={{ textAlign: 'center', py: 6 }}>
                   <Typography
@@ -99,19 +112,22 @@ function App() {
                     color="text.secondary"
                     sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
                   >
-                    No hay tareas aún. ¡Agrega tu primera tarea!
+                    Sin tareas cargadas...
                   </Typography>
                 </CardContent>
               </Card>
-            ) : (
-              // Aquí irán las tareas cuando las implementemos
-              <Box>
-                {/* Lista de tareas */}
-              </Box>
-            )}
-          </Box>
+            </Box>
+          }
+
         </Container>
       </Box>
+
+      <TareasCrear
+        open={dialogOpenCrear}
+        onClose={handleCloseDialogCrear}
+        nuevaTarea={handleNuevaTarea}
+      />
+
     </ThemeProvider>
   )
 }
