@@ -10,11 +10,10 @@ import {
   createTheme
 } from '@mui/material'
 import TareasCrear from './components/TareasCrear'
-import TarjetaTarea from './components/TarjetaTarea'
+import Filtros from './components/Filtros'
 
 const theme = createTheme({
   palette: {
-    mode: 'dark',
     primary: {
       main: '#bb86fc',
     },
@@ -104,30 +103,7 @@ function App() {
             </CardContent>
           </Card>
 
-          {tareas.length === 0 &&
-            <Box sx={{ mt: 3 }}>
-              <Card elevation={1}>
-                <CardContent sx={{ textAlign: 'center', py: 6 }}>
-                  <Typography
-                    variant="h6"
-                    color="text.secondary"
-                    sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
-                  >
-                    Sin tareas cargadas...
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Box>
-          }
-
-          {
-            Array.isArray(tareas) && tareas.length > 0 && tareas.map((tarea) => (
-              <TarjetaTarea
-                key={tarea.id}
-                tarea={tarea}
-              />
-            ))
-          }
+          <Filtros tareas={tareas} />
 
         </Container>
       </Box>
