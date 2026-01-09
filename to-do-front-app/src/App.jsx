@@ -10,6 +10,7 @@ import {
   createTheme
 } from '@mui/material'
 import TareasCrear from './components/TareasCrear'
+import TarjetaTarea from './components/TarjetaTarea'
 
 const theme = createTheme({
   palette: {
@@ -117,6 +118,15 @@ function App() {
                 </CardContent>
               </Card>
             </Box>
+          }
+
+          {
+            Array.isArray(tareas) && tareas.length > 0 && tareas.map((tarea) => (
+              <TarjetaTarea
+                key={tarea.id}
+                tarea={tarea}
+              />
+            ))
           }
 
         </Container>

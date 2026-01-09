@@ -22,7 +22,8 @@ export default function TareasCrear({ open, onClose, nuevaTarea }) {
         id: Date.now(),
         titulo: titulo.trim(),
         descripcion: descripcion.trim(),
-        completada: false
+        completada: false,
+        usuario: 'Administrador Sistema'
       })
       limpiarFormulario();
     }
