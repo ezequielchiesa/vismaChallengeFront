@@ -11,6 +11,7 @@ import {
 } from '@mui/material'
 import TareasCrear from './components/TareasCrear'
 import Filtros from './components/Filtros'
+import { getUsuarios } from './api/getUsuarios'
 
 const theme = createTheme({
   palette: {
@@ -35,9 +36,20 @@ function App() {
 
   const [tareas, setTareas] = useState([]);
   const [dialogOpenCrear, setDialogOpenCrear] = useState(false);
+  const [listaUsuarios, setListaUsuarios] = useState([]);
 
-  const handleOpenDialogCrear = () => {
-    setDialogOpenCrear(true)
+  const obtenerUsuarios = async () => {
+    await getUsuarios()
+      .then(res => {
+        if (res.success) {
+          setListaUsuarios(res.data)
+        }
+      })
+  }
+
+  const handleOpenDialogCrear = async () => {
+    await obtenerUsuarios();
+    setDialogOpenCrear(true);
   }
 
   const handleCloseDialogCrear = () => {
@@ -112,6 +124,8 @@ function App() {
         open={dialogOpenCrear}
         onClose={handleCloseDialogCrear}
         nuevaTarea={handleNuevaTarea}
+        listaUsuarios={listaUsuarios}
+        obtenerUsuarios={obtenerUsuarios}
       />
 
     </ThemeProvider>

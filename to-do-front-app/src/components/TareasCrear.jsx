@@ -18,7 +18,7 @@ import { crearUsuario } from '../api/usuarios'
 import CustomAlert from './CustomAlert'
 import FormularioUsuario from './FormularioUsuario'
 
-export default function TareasCrear({ open, onClose, nuevaTarea }) {
+export default function TareasCrear({ open, onClose, nuevaTarea, listaUsuarios, obtenerUsuarios }) {
   const [titulo, setTitulo] = useState('')
   const [descripcion, setDescripcion] = useState('')
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState('')
@@ -70,7 +70,7 @@ export default function TareasCrear({ open, onClose, nuevaTarea }) {
     
     if (titulo.trim()) {
       const usuarioAsignado = usuarioSeleccionado 
-        ? usuarios.find(u => u.id === usuarioSeleccionado)?.name 
+        ? listaUsuarios.find(u => u.id === usuarioSeleccionado)?.name 
         : 'Sin asignar'
       
       nuevaTarea({
@@ -152,7 +152,7 @@ export default function TareasCrear({ open, onClose, nuevaTarea }) {
                   <MenuItem value="">
                     <em>Sin asignar</em>
                   </MenuItem>
-                  {usuarios.map((usuario) => (
+                  {listaUsuarios.map((usuario) => (
                     <MenuItem key={usuario.id} value={usuario.id}>
                       {usuario.name}
                     </MenuItem>
