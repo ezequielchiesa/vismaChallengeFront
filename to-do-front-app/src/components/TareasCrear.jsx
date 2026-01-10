@@ -7,23 +7,42 @@ import {
   TextField,
   Button,
   Box,
-  Typography
+  Typography,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  FormHelperText
 } from '@mui/material'
 
 export default function TareasCrear({ open, onClose, nuevaTarea }) {
   const [titulo, setTitulo] = useState('')
   const [descripcion, setDescripcion] = useState('')
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState('')
+
+  // Datos simulados de usuarios
+  const usuarios = [
+    { id: 1, name: 'Ezequiel Chiesa' },
+    { id: 2, name: 'María García' },
+    { id: 3, name: 'Juan Pérez' },
+    { id: 4, name: 'Ana López' },
+    { id: 5, name: 'Carlos Martínez' }
+  ]
 
   const handleSubmit = (e) => {
     e.preventDefault()
     
     if (titulo.trim()) {
+      const usuarioAsignado = usuarioSeleccionado 
+        ? usuarios.find(u => u.id === usuarioSeleccionado)?.name 
+        : 'Sin asignar'
+      
       nuevaTarea({
         id: Date.now(),
         titulo: titulo.trim(),
         descripcion: descripcion.trim(),
         completada: false,
-        usuario: 'Administrador Sistema'
+        usuario: usuarioAsignado
       })
       limpiarFormulario();
     }
@@ -32,6 +51,7 @@ export default function TareasCrear({ open, onClose, nuevaTarea }) {
   const limpiarFormulario = () => {
     setTitulo('')
     setDescripcion('')
+    setUsuarioSeleccionado('')
     onClose()
   }
 
@@ -80,6 +100,50 @@ export default function TareasCrear({ open, onClose, nuevaTarea }) {
               helperText={`${descripcion.length}/500 caracteres`}
               variant="outlined"
             />
+            
+            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+              <FormControl fullWidth>
+                <InputLabel id="usuario-select-label">Usuario</InputLabel>
+                <Select
+                  labelId="usuario-select-label"
+                  value={usuarioSeleccionado}
+                  label="Usuario"
+                  onChange={(e) => setUsuarioSeleccionado(e.target.value)}
+                  variant="outlined"
+                >
+                  <MenuItem value="">
+                    <em>Sin asignar</em>
+                  </MenuItem>
+                  {usuarios.map((usuario) => (
+                    <MenuItem key={usuario.id} value={usuario.id}>
+                      {usuario.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>Asignar tarea</FormHelperText>
+              </FormControl>
+              
+              <Button
+                variant="outlined"
+                sx={{ 
+                  minWidth: '140px',
+                  height: '56px',
+                  color: 'primary.main',
+                  borderColor: 'primary.main',
+                  '&:hover': {
+                    borderColor: 'primary.dark',
+                    bgcolor: 'primary.main',
+                    color: 'white'
+                  }
+                }}
+                onClick={() => {
+                  // Aquí se podría abrir otro dialog para crear usuario
+                  alert('Función "Crear Usuario" pendiente de implementar')
+                }}
+              >
+                Crear Usuario
+              </Button>
+            </Box>
           </Box>
         </DialogContent>
         
@@ -94,7 +158,7 @@ export default function TareasCrear({ open, onClose, nuevaTarea }) {
           <Button 
             type="submit"
             variant="contained"
-            disabled={!titulo.trim()}
+            disabled={!titulo.trim() || !usuarioSeleccionado}
             sx={{
               background: 'linear-gradient(45deg, #bb86fc 30%, #03dac6 90%)',
               '&:hover': {
