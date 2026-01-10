@@ -1,8 +1,8 @@
 import axios from 'axios'
 
-export const crearUsuario = async (usuario) => {
+export const getUsuarios = async () => {
   try {
-    const respuesta = await axios.post('http://localhost:3000/users', usuario)
+    const respuesta = await axios.get('http://localhost:3000/getUsers')
     // console.log('Respuesta del servidor:', respuesta.data)
     return respuesta.data
   } catch (error) {
