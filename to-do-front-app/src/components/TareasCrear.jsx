@@ -44,12 +44,13 @@ export default function TareasCrear({ open, onClose, nuevaTarea, listaUsuarios, 
 
   const manejarConfirmarUsuario = async (datosUsuario) => {
     try {
-      const respuesta = await crearUsuario(datosUsuario)
+      // Al crear un nuevo usuario, recargo la lista de usuarios disponibles
+      await crearUsuario(datosUsuario)
+
+      await obtenerUsuarios();
       
-      // Ocultar formulario
       setMostrandoFormUsuario(false)
       
-      // Mostrar alerta de éxito
       setMensajeAlerta(`Usuario "${datosUsuario.name}" creado exitosamente`)
       setTipoAlerta('success')
       setAlertaAbierta(true)
