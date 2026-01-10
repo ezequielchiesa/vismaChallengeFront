@@ -14,6 +14,7 @@ import {
   InputLabel,
   FormHelperText
 } from '@mui/material'
+import { crearUsuario } from '../api/usuarios'
 
 export default function TareasCrear({ open, onClose, nuevaTarea }) {
   const [titulo, setTitulo] = useState('')
@@ -28,6 +29,10 @@ export default function TareasCrear({ open, onClose, nuevaTarea }) {
     { id: 4, name: 'Ana López' },
     { id: 5, name: 'Carlos Martínez' }
   ]
+
+  const nuevoUsuario = async () => {
+    await crearUsuario(usuarios[0])
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -136,10 +141,11 @@ export default function TareasCrear({ open, onClose, nuevaTarea }) {
                     color: 'white'
                   }
                 }}
-                onClick={() => {
-                  // Aquí se podría abrir otro dialog para crear usuario
-                  alert('Función "Crear Usuario" pendiente de implementar')
-                }}
+                onClick={nuevoUsuario}
+                // onClick={() => {
+                //   // Aquí se podría abrir otro dialog para crear usuario
+                //   alert('Función "Crear Usuario" pendiente de implementar')
+                // }}
               >
                 Crear Usuario
               </Button>
