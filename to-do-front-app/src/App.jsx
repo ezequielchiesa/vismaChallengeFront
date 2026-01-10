@@ -56,9 +56,6 @@ function App() {
     setDialogOpenCrear(false)
   }
 
-  const handleNuevaTarea = (nuevaTarea) => {
-    setTareas(prev => [...prev, nuevaTarea])
-  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -123,7 +120,7 @@ function App() {
       <TareasCrear
         open={dialogOpenCrear}
         onClose={handleCloseDialogCrear}
-        nuevaTarea={handleNuevaTarea}
+        // nuevaTarea={handleNuevaTarea}
         listaUsuarios={listaUsuarios}
         obtenerUsuarios={obtenerUsuarios}
       />
