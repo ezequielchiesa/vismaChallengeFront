@@ -12,11 +12,11 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  FormHelperText,
-  Alert,
-  Snackbar
+  FormHelperText
 } from '@mui/material'
 import { crearUsuario } from '../api/usuarios'
+import CustomAlert from './CustomAlert'
+import FormularioUsuario from './FormularioUsuario'
 
 export default function TareasCrear({ open, onClose, nuevaTarea }) {
   const [titulo, setTitulo] = useState('')
@@ -25,8 +25,6 @@ export default function TareasCrear({ open, onClose, nuevaTarea }) {
   
   // Estados para crear usuario
   const [mostrandoFormUsuario, setMostrandoFormUsuario] = useState(false)
-  const [nombreUsuario, setNombreUsuario] = useState('')
-  const [correoUsuario, setCorreoUsuario] = useState('')
   const [alertaAbierta, setAlertaAbierta] = useState(false)
   const [mensajeAlerta, setMensajeAlerta] = useState('')
   const [tipoAlerta, setTipoAlerta] = useState('success')
@@ -40,41 +38,19 @@ export default function TareasCrear({ open, onClose, nuevaTarea }) {
     { id: 5, name: 'Carlos Martínez' }
   ]
 
-  // Validación de email
-  const validarEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return regex.test(email)
-  }
-
-  // Verificar si el formulario de usuario es válido
-  const formularioUsuarioValido = () => {
-    return nombreUsuario.trim() && 
-           correoUsuario.trim() && 
-           validarEmail(correoUsuario) &&
-           nombreUsuario.length <= 50 &&
-           correoUsuario.length <= 70
-  }
-
   const mostrarFormularioUsuario = () => {
     setMostrandoFormUsuario(true)
   }
 
-  const confirmarCrearUsuario = async () => {
+  const manejarConfirmarUsuario = async (datosUsuario) => {
     try {
-      const nuevoUsuarioData = {
-        name: nombreUsuario.trim(),
-        email: correoUsuario.trim()
-      }
+      const respuesta = await crearUsuario(datosUsuario)
       
-      const respuesta = await crearUsuario(nuevoUsuarioData)
-      
-      // Resetear valores y ocultar formulario
-      setNombreUsuario('')
-      setCorreoUsuario('')
+      // Ocultar formulario
       setMostrandoFormUsuario(false)
       
       // Mostrar alerta de éxito
-      setMensajeAlerta(`Usuario "${nuevoUsuarioData.name}" creado exitosamente`)
+      setMensajeAlerta(`Usuario "${datosUsuario.name}" creado exitosamente`)
       setTipoAlerta('success')
       setAlertaAbierta(true)
       
@@ -83,6 +59,10 @@ export default function TareasCrear({ open, onClose, nuevaTarea }) {
       setTipoAlerta('error')
       setAlertaAbierta(true)
     }
+  }
+
+  const manejarCancelarUsuario = () => {
+    setMostrandoFormUsuario(false)
   }
 
   const handleSubmit = (e) => {
@@ -109,8 +89,6 @@ export default function TareasCrear({ open, onClose, nuevaTarea }) {
     setDescripcion('')
     setUsuarioSeleccionado('')
     setMostrandoFormUsuario(false)
-    setNombreUsuario('')
-    setCorreoUsuario('')
     onClose()
   }
 
@@ -202,61 +180,11 @@ export default function TareasCrear({ open, onClose, nuevaTarea }) {
               </Button>
             </Box>
 
-            {/* Formulario para crear usuario */}
-            {mostrandoFormUsuario && (
-              <Box sx={{ 
-                display: 'flex', 
-                flexDirection: 'column', 
-                gap: 2, 
-                p: 2, 
-                border: '1px solid #e0e0e0', 
-                borderRadius: 2,
-                bgcolor: '#f9f9f9'
-              }}>
-                <Typography variant="subtitle2" color="primary.main">
-                  Nuevo Usuario
-                </Typography>
-                
-                <TextField
-                  label="Nombre"
-                  value={nombreUsuario}
-                  onChange={(e) => setNombreUsuario(e.target.value)}
-                  fullWidth
-                  required
-                  inputProps={{ maxLength: 50 }}
-                  helperText={`${nombreUsuario.length}/50 caracteres`}
-                  variant="outlined"
-                  size="small"
-                />
-                
-                <TextField
-                  label="Correo electrónico"
-                  value={correoUsuario}
-                  onChange={(e) => setCorreoUsuario(e.target.value)}
-                  fullWidth
-                  required
-                  type="email"
-                  inputProps={{ maxLength: 70 }}
-                  helperText={
-                    correoUsuario && !validarEmail(correoUsuario) 
-                      ? 'Formato de email inválido' 
-                      : `${correoUsuario.length}/70 caracteres`
-                  }
-                  error={correoUsuario && !validarEmail(correoUsuario)}
-                  variant="outlined"
-                  size="small"
-                />
-                
-                <Button
-                  variant="contained"
-                  onClick={confirmarCrearUsuario}
-                  disabled={!formularioUsuarioValido()}
-                  sx={{ alignSelf: 'flex-end', mt: 1 }}
-                >
-                  Confirmar
-                </Button>
-              </Box>
-            )}
+            <FormularioUsuario
+              mostrar={mostrandoFormUsuario}
+              onConfirmar={manejarConfirmarUsuario}
+              onCancelar={manejarCancelarUsuario}
+            />
           </Box>
         </DialogContent>
         
@@ -271,7 +199,7 @@ export default function TareasCrear({ open, onClose, nuevaTarea }) {
           <Button 
             type="submit"
             variant="contained"
-            disabled={!titulo.trim()}
+            disabled={!titulo.trim() || !usuarioSeleccionado}
             sx={{
               background: 'linear-gradient(45deg, #bb86fc 30%, #03dac6 90%)',
               '&:hover': {
@@ -285,21 +213,12 @@ export default function TareasCrear({ open, onClose, nuevaTarea }) {
       </form>
     </Dialog>
 
-    {/* Snackbar para alertas */}
-    <Snackbar 
-      open={alertaAbierta} 
-      autoHideDuration={4000} 
+    <CustomAlert
+      open={alertaAbierta}
       onClose={() => setAlertaAbierta(false)}
-      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-    >
-      <Alert 
-        onClose={() => setAlertaAbierta(false)} 
-        severity={tipoAlerta}
-        sx={{ width: '100%' }}
-      >
-        {mensajeAlerta}
-      </Alert>
-    </Snackbar>
+      message={mensajeAlerta}
+      severity={tipoAlerta}
+    />
   </>
   )
 }
