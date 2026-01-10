@@ -6,7 +6,7 @@ export default function CustomAlert({
   message, 
   severity = 'info', 
   autoHideDuration = 4000,
-  position = { vertical: 'top', horizontal: 'center' }
+  position = { vertical: 'bottom', horizontal: 'center' }
 }) {
   return (
     <Snackbar 

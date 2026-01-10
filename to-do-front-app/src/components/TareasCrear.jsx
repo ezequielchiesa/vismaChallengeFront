@@ -62,16 +62,27 @@ export default function TareasCrear({ open, onClose, listaUsuarios, obtenerUsuar
     e.preventDefault()
 
     if (titulo.trim()) {
+      try {
+        const dataTask = {
+          titulo: titulo.trim(),
+          descripcion: descripcion.trim(),
+          usuario: usuarioSeleccionado
+        }
 
-      const dataTask = {
-        titulo: titulo.trim(),
-        descripcion: descripcion.trim(),
-        usuario: usuarioSeleccionado
+        const respuesta = await crearTarea(dataTask);
+        
+        // Mostrar alerta de éxito
+        setMensajeAlerta('Tarea creada exitosamente')
+        setTipoAlerta('success')
+        setAlertaAbierta(true)
+
+        limpiarFormulario();
+      } catch (error) {
+        // Mostrar alerta de error
+        setMensajeAlerta('Error al crear la tarea. Intenta nuevamente.')
+        setTipoAlerta('error')
+        setAlertaAbierta(true)
       }
-
-      await crearTarea(dataTask);
-
-      limpiarFormulario();
     }
   }
 
