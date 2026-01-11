@@ -16,10 +16,11 @@ import {
 } from '@mui/material'
 import { crearUsuario } from '../api/usuarios'
 import { crearTarea } from '../api/task'
+import { getTasks } from '../api/getTasks'
 import CustomAlert from './CustomAlert'
 import FormularioUsuario from './FormularioUsuario'
 
-export default function TareasCrear({ open, onClose, listaUsuarios, obtenerUsuarios }) {
+export default function TareasCrear({ open, onClose, listaUsuarios, obtenerUsuarios, setTareas }) {
   const [titulo, setTitulo] = useState('')
   const [descripcion, setDescripcion] = useState('')
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState('')
@@ -70,13 +71,19 @@ export default function TareasCrear({ open, onClose, listaUsuarios, obtenerUsuar
         }
 
         const respuesta = await crearTarea(dataTask);
-        
+
         // Mostrar alerta de éxito
         setMensajeAlerta('Tarea creada exitosamente')
         setTipoAlerta('success')
         setAlertaAbierta(true)
 
         limpiarFormulario();
+
+        const res = await getTasks()
+        if (res && res.data) {
+          setTareas(res.data)
+        }
+
       } catch (error) {
         // Mostrar alerta de error
         setMensajeAlerta('Error al crear la tarea. Intenta nuevamente.')

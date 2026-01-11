@@ -123,9 +123,9 @@ function App() {
       <TareasCrear
         open={dialogOpenCrear}
         onClose={handleCloseDialogCrear}
-        // nuevaTarea={handleNuevaTarea}
         listaUsuarios={listaUsuarios}
         obtenerUsuarios={obtenerUsuarios}
+        setTareas={setTareas}
       />
 
     </ThemeProvider>
