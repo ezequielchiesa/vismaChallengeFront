@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Box,
   Card,
@@ -11,6 +11,7 @@ import TarjetaTarea from './TarjetaTarea'
 import { getTasks } from '../api/getTasks'
 
 export default function Filtros({ tareas, setTareas }) {
+  const [filtroActivo, setFiltroActivo] = useState('todas')
 
   useEffect(() => {
     const cargarTareas = async () => {
@@ -26,6 +27,22 @@ export default function Filtros({ tareas, setTareas }) {
 
     cargarTareas()
   }, [])
+
+  // Filtrar tareas según el filtro activo
+  const tareasFiltradas = () => {
+    switch (filtroActivo) {
+      case 'finalizadas':
+        return tareas.filter(tarea => tarea.status === true || tarea.status === 1)
+      case 'pendientes':
+        return tareas.filter(tarea => tarea.status === false || tarea.status === 0)
+      default:
+        return tareas
+    }
+  }
+
+  const handleFiltroClick = (filtro) => {
+    setFiltroActivo(filtro)
+  }
 
   return (
     <>
@@ -49,9 +66,27 @@ export default function Filtros({ tareas, setTareas }) {
           <Card elevation={1}>
             <CardContent sx={{ textAlign: 'center', py: 4 }}>
               <Stack direction="row" spacing={1} sx={{ justifyContent: 'center', px: { xs: 0, lg: 5 } }}>
-                <Button fullWidth variant="outlined">Todas</Button>
-                <Button fullWidth variant="outlined">Finalizadas</Button>
-                <Button fullWidth variant="outlined">Pendientes</Button>
+                <Button 
+                  fullWidth 
+                  variant={filtroActivo === 'todas' ? 'contained' : 'outlined'}
+                  onClick={() => handleFiltroClick('todas')}
+                >
+                  Todas
+                </Button>
+                <Button 
+                  fullWidth 
+                  variant={filtroActivo === 'finalizadas' ? 'contained' : 'outlined'}
+                  onClick={() => handleFiltroClick('finalizadas')}
+                >
+                  Finalizadas
+                </Button>
+                <Button 
+                  fullWidth 
+                  variant={filtroActivo === 'pendientes' ? 'contained' : 'outlined'}
+                  onClick={() => handleFiltroClick('pendientes')}
+                >
+                  Pendientes
+                </Button>
               </Stack>
             </CardContent>
           </Card>
@@ -59,7 +94,7 @@ export default function Filtros({ tareas, setTareas }) {
       }
 
       {
-        Array.isArray(tareas) && tareas.length > 0 && tareas.map((tarea) => (
+        Array.isArray(tareasFiltradas()) && tareasFiltradas().length > 0 && tareasFiltradas().map((tarea) => (
           <TarjetaTarea
             key={tarea.id}
             tarea={tarea}
