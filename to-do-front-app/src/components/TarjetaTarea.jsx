@@ -13,10 +13,12 @@ import {
     Button
 } from '@mui/material'
 import { useState } from 'react'
+import { tareaRealizada } from '../api/taskCompleted'
+import { getTasks } from '../api/getTasks'
 
-export default function TarjetaTarea({ tarea }) {
+export default function TarjetaTarea({ tarea, setTareas }) {
     const [dialogOpen, setDialogOpen] = useState(false)
-    
+
     const getCardColor = () => {
         if (tarea.status) return '#4db6ac'
         return '#f06292'
@@ -49,8 +51,19 @@ export default function TarjetaTarea({ tarea }) {
         setDialogOpen(false)
     }
 
-    const handleCheckboxClick = (e) => {
+    const handleCheckboxClick = async (e) => {
         e.stopPropagation() // Evitar que se abra el dialog al hacer click en el checkbox
+
+        try {
+            await tareaRealizada(tarea.id)
+
+            const res = await getTasks()
+            if (res && res.data) {
+                setTareas(res.data)
+            }
+        } catch (error) {
+            console.error('Error al completar la tarea:', error)
+        }
     }
 
     return (
@@ -181,9 +194,9 @@ export default function TarjetaTarea({ tarea }) {
                             <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                                 Estado
                             </Typography>
-                            <Typography 
-                                variant="body1" 
-                                sx={{ 
+                            <Typography
+                                variant="body1"
+                                sx={{
                                     color: getStatusColor(),
                                     fontWeight: 'bold'
                                 }}
@@ -218,7 +231,7 @@ export default function TarjetaTarea({ tarea }) {
                 </DialogContent>
 
                 <DialogActions sx={{ p: 3, pt: 2 }}>
-                    <Button 
+                    <Button
                         onClick={handleCloseDialog}
                         variant="contained"
                         sx={{

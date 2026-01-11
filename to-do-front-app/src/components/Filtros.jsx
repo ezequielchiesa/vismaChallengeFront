@@ -63,6 +63,7 @@ export default function Filtros({ tareas, setTareas }) {
           <TarjetaTarea
             key={tarea.id}
             tarea={tarea}
+            setTareas={setTareas}
           />
         ))
       }
