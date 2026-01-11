@@ -18,12 +18,12 @@ export default function TarjetaTarea({ tarea }) {
     const [dialogOpen, setDialogOpen] = useState(false)
     
     const getCardColor = () => {
-        if (tarea.completada) return '#4db6ac'
+        if (tarea.status) return '#4db6ac'
         return '#f06292'
     }
 
     const getBorderColor = () => {
-        if (tarea.completada) return '#b2dfdb'
+        if (tarea.status) return '#b2dfdb'
         return '#f8bbd0'
     }
 
@@ -37,7 +37,7 @@ export default function TarjetaTarea({ tarea }) {
     }
 
     const getStatusColor = () => {
-        if (tarea.completada) return '#4db6ac'
+        if (tarea.status) return '#4db6ac'
         return '#f06292'
     }
 
@@ -81,12 +81,12 @@ export default function TarjetaTarea({ tarea }) {
                                     fontWeight: 'bold'
                                 }}
                             >
-                                {getInitials(tarea.usuario)}
+                                {getInitials(tarea.name)}
                             </Avatar>
 
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
                                 <Typography variant="h6" component="h3" color="white" sx={{ fontWeight: 'bold' }}>
-                                    {tarea.titulo}
+                                    {tarea.title}
                                 </Typography>
 
                                 <Typography
@@ -102,7 +102,7 @@ export default function TarjetaTarea({ tarea }) {
                                         width: 'fit-content'
                                     }}
                                 >
-                                    {tarea.completada ? 'Completada' : 'Pendiente'}
+                                    {tarea.status ? 'Completada' : 'Pendiente'}
                                 </Typography>
 
                                 <Typography variant="caption" color="rgba(255, 255, 255, 0.7)">
@@ -111,7 +111,7 @@ export default function TarjetaTarea({ tarea }) {
                             </Box>
                         </Box>
 
-                        {!tarea.completada && (
+                        {!tarea.status && (
                             <FormControlLabel
                                 control={
                                     <Checkbox
@@ -162,17 +162,17 @@ export default function TarjetaTarea({ tarea }) {
                                 Título
                             </Typography>
                             <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                                {tarea.titulo}
+                                {tarea.title}
                             </Typography>
                         </Box>
 
-                        {tarea.descripcion && (
+                        {tarea.description && (
                             <Box>
                                 <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                                     Descripción
                                 </Typography>
                                 <Typography variant="body1">
-                                    {tarea.descripcion}
+                                    {tarea.description}
                                 </Typography>
                             </Box>
                         )}
@@ -188,7 +188,7 @@ export default function TarjetaTarea({ tarea }) {
                                     fontWeight: 'bold'
                                 }}
                             >
-                                {tarea.completada ? 'Completada' : 'Pendiente'}
+                                {tarea.status ? 'Completada' : 'Pendiente'}
                             </Typography>
                         </Box>
 
@@ -198,10 +198,10 @@ export default function TarjetaTarea({ tarea }) {
                             </Typography>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                 <Avatar sx={{ width: 24, height: 24, fontSize: '0.75rem' }}>
-                                    {getInitials(tarea.usuario)}
+                                    {getInitials(tarea.name)}
                                 </Avatar>
                                 <Typography variant="body1">
-                                    {tarea.usuario}
+                                    {tarea.name}
                                 </Typography>
                             </Box>
                         </Box>

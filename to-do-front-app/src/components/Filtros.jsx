@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import {
   Box,
   Card,
@@ -7,8 +8,25 @@ import {
   Stack
 } from '@mui/material'
 import TarjetaTarea from './TarjetaTarea'
+import { getTasks } from '../api/getTasks'
 
-export default function Filtros({ tareas }) {
+export default function Filtros({ tareas, setTareas }) {
+
+  useEffect(() => {
+    const cargarTareas = async () => {
+      try {
+        const res = await getTasks()
+        if (res && res.data) {
+          setTareas(res.data)
+        }
+      } catch (error) {
+        console.error('Error al cargar tareas:', error)
+      }
+    }
+
+    cargarTareas()
+  }, [])
+
   return (
     <>
       {tareas.length === 0

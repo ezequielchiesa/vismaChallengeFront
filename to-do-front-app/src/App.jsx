@@ -112,7 +112,10 @@ function App() {
             </CardContent>
           </Card>
 
-          <Filtros tareas={tareas} />
+          <Filtros
+            tareas={tareas}
+            setTareas={setTareas}
+          />
 
         </Container>
       </Box>
